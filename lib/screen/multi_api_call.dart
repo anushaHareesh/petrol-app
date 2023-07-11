@@ -23,13 +23,11 @@ class _MultiApiState extends State<MultiApi> {
               ElevatedButton(
                   onPressed: () {
                     Provider.of<Controller>(context, listen: false)
-                        .adminReportData(
-                      context,
-                    );
+                        .adminReportData(context, "");
                   },
-                  child: Text("send api")),
+                  child: const Text("send api")),
               value.isReportLoading
-                  ? SpinKitCircle(
+                  ? const SpinKitCircle(
                       color: Colors.black,
                     )
                   : Expanded(

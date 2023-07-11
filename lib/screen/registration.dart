@@ -1,12 +1,11 @@
 import 'dart:io';
-
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:petrol/screen/header_widget.dart';
 import 'package:provider/provider.dart';
-
+import '../components/external_dir.dart';
 import '../controller/registration_controller.dart';
 
 class Registration extends StatefulWidget {
@@ -23,6 +22,7 @@ class _RegistrationState extends State<Registration> {
   static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
 
   Map<String, dynamic> _deviceData = <String, dynamic>{};
+  ExternalDir externalDir = ExternalDir();
 
   FocusNode? fieldFocusNode;
   TextEditingController codeController = TextEditingController();
@@ -99,14 +99,15 @@ class _RegistrationState extends State<Registration> {
                   height: MediaQuery.of(context).size.height * 0.04,
                 ),
                 InkWell(
-                  onTap: () {
+                  onTap: () async {
+                    String deviceInfo = "$manufacturer" + '' + "$model";
                     if (_formKey.currentState!.validate()) {
-                      // Provider.of<RegistrationController>(context,
-                      //         listen: false)
-                      //     .getLogin(usernmae.text, pass.text, context);
-                      // usernmae.clear();
-                      // custCode.clear();
-                      // pass.clear();
+                      String tempFp1 = await externalDir.fileRead();
+                      // ignore: use_build_context_synchronously
+                      Provider.of<RegistrationController>(context,
+                              listen: false)
+                          .postRegistration(codeController.text, tempFp1,
+                              phoneController.text, deviceInfo, context);
                     }
                   },
                   child: Container(
@@ -115,8 +116,8 @@ class _RegistrationState extends State<Registration> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
                       gradient: LinearGradient(
-                        begin: Alignment(-0.95, 0.0),
-                        end: Alignment(1.0, 0.0),
+                        begin: const Alignment(-0.95, 0.0),
+                        end: const Alignment(1.0, 0.0),
                         colors: [
                           Theme.of(context).primaryColor,
                           const Color(0xff64b6ff)
@@ -130,16 +131,16 @@ class _RegistrationState extends State<Registration> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text(
-                            "Login",
+                            "REGISTER",
                             style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 18,
+                                fontSize: 15,
                                 fontWeight: FontWeight.bold),
                           ),
                           SizedBox(
                             width: size.width * 0.02,
                           ),
-                          value.isLoginLoading
+                          value.isLoading
                               ? const SpinKitCircle(
                                   size: 18,
                                   color: Colors.white,
@@ -174,6 +175,7 @@ Widget customTextField(String hinttext, TextEditingController controllerValue,
     child: Padding(
       padding: const EdgeInsets.only(top: 15, left: 16, right: 16),
       child: TextFormField(
+        keyboardType: type == "phone" ? TextInputType.number : null,
         scrollPadding: EdgeInsets.only(bottom: topInsets + size.height * 0.18),
         controller: controllerValue,
         decoration: InputDecoration(

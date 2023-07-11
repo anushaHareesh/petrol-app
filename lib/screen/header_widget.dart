@@ -49,12 +49,18 @@ class _HeaderWidgetState extends State<HeaderWidget> {
           ]),
         ),
         ClipPath(
+          clipper: ShapeClipper([
+            Offset(width / 3, _height + 20),
+            Offset(width / 10 * 8, _height - 60),
+            Offset(width / 5 * 4, _height - 60),
+            Offset(width, _height - 20)
+          ]),
           child: Container(
             decoration: BoxDecoration(
               gradient:  LinearGradient(
                   colors: [
                     Theme.of(context).primaryColor.withOpacity(0.4),
-                    Theme.of(context).accentColor.withOpacity(0.4),
+                    Theme.of(context).colorScheme.secondary.withOpacity(0.4),
                   ],
                   begin: const FractionalOffset(0.0, 0.0),
                   end: const FractionalOffset(1.0, 0.0),
@@ -62,20 +68,20 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                   tileMode: TileMode.clamp),
             ),
           ),
-          clipper: ShapeClipper([
-            Offset(width / 3, _height + 20),
-            Offset(width / 10 * 8, _height - 60),
-            Offset(width / 5 * 4, _height - 60),
-            Offset(width, _height - 20)
-          ]),
         ),
         ClipPath(
+          clipper:ShapeClipper([
+            Offset(width / 5, _height),
+            Offset(width / 2, _height - 40),
+            Offset(width / 5 * 4, _height - 80),
+            Offset(width, _height - 20)
+          ]),
           child: Container(
             decoration: new BoxDecoration(
               gradient: new LinearGradient(
                   colors: [
                     Theme.of(context).primaryColor,
-                    Theme.of(context).accentColor,
+                    Theme.of(context).colorScheme.secondary,
                   ],
                   begin: const FractionalOffset(0.0, 0.0),
                   end: const FractionalOffset(1.0, 0.0),
@@ -83,16 +89,10 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                   tileMode: TileMode.clamp),
             ),
           ),
-          clipper:ShapeClipper([
-            Offset(width / 5, _height),
-            Offset(width / 2, _height - 40),
-            Offset(width / 5 * 4, _height - 80),
-            Offset(width, _height - 20)
-          ]),
         ),
         Visibility(
           visible: _showIcon,
-          child: Container(
+          child: SizedBox(
             height: _height - 40,
             child: Center(
               child: Container(

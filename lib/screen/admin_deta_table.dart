@@ -1,9 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
-
 import '../controller/controller.dart';
 
 class TableData extends StatefulWidget {
@@ -41,34 +37,35 @@ class _TableDataState extends State<TableData> {
   @override
   Widget build(BuildContext context) {
     return Consumer<Controller>(
-      builder: (context, value, child) => value.iscontentLoading[widget.index]
-          ? SpinKitCircle(
-              color: Colors.black,
-            )
-          : SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: DataTable(
-                  columnSpacing: 20,
-                  headingRowHeight: 39,
-                  dataRowHeight: 42,
-                  headingTextStyle: TextStyle(
-                      fontWeight: FontWeight.bold, color: Colors.grey[700]),
-                  dataTextStyle: TextStyle(color: Colors.grey[800]),
-                  headingRowColor:
-                      MaterialStateColor.resolveWith((states) => Colors.yellow),
-                  columns: [
-                    DataColumn(label: Text('Date')),
-                    DataColumn(label: Text('IOCL Billed')),
-                    DataColumn(label: Text('IOCL Collected')),
-                    DataColumn(label: Text('Supplier Billed')),
-                    DataColumn(label: Text('Paid To Supplier')),
-                    DataColumn(label: Text('Contractor Billed')),
-                    DataColumn(label: Text('Paid To Contractor')),
-                    DataColumn(label: Text('Labour Paid')),
-                    DataColumn(label: Text('Total')),
-                  ],
-                  rows: initRows(value.adminReportTotal)),
-            ),
+      builder: (context, value, child) => SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: DataTable(
+            columnSpacing: 20,
+            headingRowHeight: 39,
+            dataRowHeight: 42,
+            headingTextStyle:
+                TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[700]),
+            dataTextStyle: TextStyle(color: Colors.grey[800]),
+            headingRowColor: MaterialStateColor.resolveWith(
+                (states) => Color.fromARGB(255, 255, 230, 2)),
+            columns: const [
+              DataColumn(label: Text('Date')),
+              DataColumn(label: Text('IOCL Billed')),
+              DataColumn(label: Text('IOCL Collected')),
+              DataColumn(label: Text('Supplier Billed')),
+              DataColumn(label: Text('Paid To Supplier')),
+              DataColumn(label: Text('Contractor Billed')),
+              DataColumn(label: Text('Paid To Contractor')),
+              DataColumn(label: Text('Labour Paid')),  
+              DataColumn(
+                  label: Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        'Total',
+                      ))),
+            ],
+            rows: initRows(value.adminReportTotal)),
+      ),
     );
   }
 
@@ -80,8 +77,8 @@ class _TableDataState extends State<TableData> {
         color: i == itemList.length - 1
             ? MaterialStateProperty.all(Theme.of(context).primaryColor)
             : i % 2 == 0
-                ? MaterialStateProperty.all(Color.fromARGB(255, 245, 236, 236))
-                : MaterialStateProperty.all(Colors.grey[100]),
+                ? MaterialStateProperty.all(Color.fromARGB(255, 188, 212, 240))
+                : MaterialStateProperty.all(Color.fromARGB(255, 255, 255, 255)),
         cells: <DataCell>[
           DataCell(Align(
             alignment: Alignment.centerLeft,

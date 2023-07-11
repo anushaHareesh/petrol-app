@@ -12,9 +12,9 @@ class ExternalDir {
     String dirPath = '${extDir!.path}/VgFp/';
     // ignore: avoid_print
     print("dirPath----$dirPath");
-    dirPath = dirPath.replaceAll("Android/data/com.example.bestengineer/files/", "");
+    dirPath = dirPath.replaceAll("Android/data/com.example.petrol/files/", "");
     await Directory(dirPath).create(recursive: true);
-    final File file = File('$dirPath/fpCode.txt');
+    final File file = File('$dirPath/fpCode.txt');     
     // ignore: avoid_print
     print("file...$file");
     String filpath = '$dirPath/fpCode.txt';
@@ -34,13 +34,12 @@ class ExternalDir {
 
 ///////////////////////////////////////////////////////////////////////////////////
   fileWrite(String fp) async {
-
     // ignore: avoid_print
     print("fpppp====$fp");
     Directory? extDir = await getExternalStorageDirectory();
 
     String dirPath = '${extDir!.path}/VgFp';
-    dirPath = dirPath.replaceAll("Android/data/com.example.bestengineer/files/", "");
+    dirPath = dirPath.replaceAll("Android/data/com.example.petrol/files/", "");
     await Directory(dirPath).create(recursive: true);
 
     // Directory? baseDir = Directory('storage/emulated/0/Android/data');
@@ -48,7 +47,6 @@ class ExternalDir {
     // ignore: avoid_print
     print("file...$file");
     String filpath = '$dirPath/fpCode.txt';
-
     if (await File(filpath).exists()) {
       // ignore: avoid_print
       print("file exists");

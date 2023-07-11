@@ -6,8 +6,8 @@
    <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION"/>
    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
    <application
-        android:label="petrol"
-        android:name="${applicationName}"
+        android:label="Rahul Petro"
+        android:name="${applicationName}" 
         android:icon="@mipmap/ic_launcher"
         android:requestLegacyExternalStorage="true"
         android:preserveLegacyExternalStorage="true">

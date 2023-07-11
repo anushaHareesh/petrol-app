@@ -1,11 +1,9 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:petrol/controller/registration_controller.dart';
-
 import 'package:provider/provider.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'header_widget.dart';
 
 ValueNotifier<bool> _isObscure = ValueNotifier(true);
@@ -53,16 +51,22 @@ class _LoginState extends State<Login> {
                 const SizedBox(height: 10.0),
                 // customTextField("Customer Code", custCode, "code", context),
                 customTextField("User Name", usernmae, "user", context),
-                customTextField("Pasword", pass, "password", context),
+                customTextField("Password", pass, "password", context),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.04,
                 ),
                 InkWell(
-                  onTap: () {
+                  onTap: () async {
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    String? userType = prefs.getString("user_type");
+                    // print("user_type------$userType");
                     if (_formKey.currentState!.validate()) {
-                      // Provider.of<RegistrationController>(context,
-                      //         listen: false)
-                      //     .getLogin(usernmae.text, pass.text, context);
+                      // ignore: use_build_context_synchronously
+                      Provider.of<RegistrationController>(context,
+                              listen: false)
+                          .getLogin(usernmae.text, pass.text,
+                              userType.toString(), context);
                       // usernmae.clear();
                       // custCode.clear();
                       // pass.clear();
@@ -74,12 +78,12 @@ class _LoginState extends State<Login> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
                       gradient: LinearGradient(
-                        begin: Alignment(-0.95, 0.0),
-                        end: Alignment(1.0, 0.0),
+                        begin: const Alignment(-0.95, 0.0),
+                        end: const Alignment(1.0, 0.0),
                         colors: [
                           Theme.of(context).primaryColor,
                           const Color(0xff64b6ff)
-                        ],     
+                        ],
                         stops: [0.0, 1.0],
                       ),
                     ),
@@ -89,10 +93,10 @@ class _LoginState extends State<Login> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text(
-                            "Login",
+                            "LOGIN",
                             style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 18,
+                                fontSize: 15,
                                 fontWeight: FontWeight.bold),
                           ),
                           SizedBox(
@@ -138,19 +142,35 @@ Widget customTextField(String hinttext, TextEditingController controllerValue,
           return TextFormField(
             // style: TextStyle(color: P_Settings.loginPagetheme),
             // textCapitalization: TextCapitalization.characters,
-            keyboardType: type == "phone" ? TextInputType.number : null,
+            // keyboardType: type == "phone" ? TextInputType.number : null,
             scrollPadding:
                 EdgeInsets.only(bottom: topInsets + size.height * 0.18),
+            obscureText: type == "password" ? _isObscure.value : false,
+
             controller: controllerValue,
             decoration: InputDecoration(
                 contentPadding: EdgeInsets.zero,
-                prefixIcon: type == "company key"
+                suffixIcon: type == "password"
+                    ? IconButton(
+                        icon: Icon(
+                          _isObscure.value
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        onPressed: () {
+                          _isObscure.value = !_isObscure.value;
+                          // print("_isObscure $_isObscure");
+                        },
+                      )
+                    : null,
+                prefixIcon: type == "user"
                     ? Icon(
-                        Icons.business,
+                        Icons.person,
                         color: Theme.of(context).primaryColor,
-                      ) 
+                      )
                     : Icon(
-                        Icons.phone,
+                        Icons.password,
                         color: Theme.of(context).primaryColor,
                       ),
                 focusedBorder: OutlineInputBorder(
@@ -185,8 +205,6 @@ Widget customTextField(String hinttext, TextEditingController controllerValue,
             validator: (text) {
               if (text == null || text.isEmpty) {
                 return 'Please Enter ${hinttext}';
-              } else if (type == "phone" && text.length != 10) {
-                return 'Please Enter Valid Phone No ';
               }
               return null;
             },

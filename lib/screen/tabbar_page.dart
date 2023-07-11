@@ -1,12 +1,11 @@
 import 'package:d_chart/d_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../controller/controller.dart';
 
 class TabbarPage extends StatefulWidget {
   String id;
-  TabbarPage({required this.id});
+  TabbarPage({super.key, required this.id});
 
   @override
   State<TabbarPage> createState() => _TabbarPageState();
@@ -30,7 +29,6 @@ class _TabbarPageState extends State<TabbarPage> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
 
     return Scaffold(
       // backgroundColor: color,
@@ -54,7 +52,7 @@ class _TabbarPageState extends State<TabbarPage> {
           // ),
           Expanded(
             child: ListView.builder(
-              physics: ScrollPhysics(),
+              physics: const ScrollPhysics(),
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               itemCount: 10,

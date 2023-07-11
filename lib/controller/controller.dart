@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import '../bottomSheet/search_data_sheet.dart';
 import '../components/common_data.dart';
 import '../components/network_connectivity.dart';
+import '../screen/ad_report_screen.dart';
 
 class Controller extends ChangeNotifier {
   double tot_billd_ioc = 0.0;
@@ -15,12 +17,23 @@ class Controller extends ChangeNotifier {
   double con_paid = 0.0;
   double lab_paid = 0.0;
   double total = 0.0;
+  bool isSearch = false;
+  bool issearching = false;
+  bool searchingapi = false;
+
   var jsonEncoded;
   List<Map<String, dynamic>> list = [];
   List<Map<String, dynamic>> adminReport = [];
   List<Map<String, dynamic>> adminReportContents = [];
   List<Map<String, dynamic>> adminReportTotal = [];
+  List<Map<String, dynamic>> sub_contractor_report = [];
+  List<Map<String, dynamic>> newSubReportList = [];
+  List<Map<String, dynamic>> newadminbReportList = [];
+
+  List<Map<String, dynamic>> searchPdSupplier = [];
+  List<Map<String, dynamic>> searchPdSupplierDetails = [];
   List iscontentLoading = [];
+  List isExpanded = [];
   // bool iscontentLoading = false;
 
   bool isReportLoading = false;
@@ -50,20 +63,19 @@ class Controller extends ChangeNotifier {
   }
 
 ////////////////////////////////////////////////////////////////////////
-  adminReportData(
-    BuildContext context,
-  ) async {
+  adminReportData(BuildContext context, String rowId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? cid = prefs.getString("cid");
-    String? user_id = prefs.getString("user_id");
+    String? userId = prefs.getString("user_id");
     var map;
+    // ignore: use_build_context_synchronously
     NetConnection.networkConnection(context).then((value) async {
       if (value == true) {
         try {
           isReportLoading = true;
           notifyListeners();
           Uri url = Uri.parse("$apiurl/load_po_index.php");
-          Map body = {"row_id": " "};
+          Map body = {"row_id": rowId,};
           print("body----$body");
           http.Response response = await http.post(url, body: body);
           var map = jsonDecode(response.body);
@@ -74,6 +86,7 @@ class Controller extends ChangeNotifier {
           }
           iscontentLoading =
               List.generate(adminReport.length, (index) => false);
+          isExpanded = List.generate(adminReport.length, (index) => false);
           isReportLoading = false;
           notifyListeners();
         } catch (e) {
@@ -87,18 +100,18 @@ class Controller extends ChangeNotifier {
   }
 
   ////////////////////////////////////////////////////////////////
-  adminReportDetails(BuildContext context, String pod_a_id, int index) async {
+  adminReportDetails(
+      BuildContext context, String podAId, int index, String poCoNo,String poNo) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? cid = prefs.getString("cid");
-    String? user_id = prefs.getString("user_id");
-    var map;
+    // String? cid = prefs.getString("cid");
+    String? userId = prefs.getString("user_id");
     NetConnection.networkConnection(context).then((value) async {
       if (value == true) {
         try {
           iscontentLoading[index] = true;
           notifyListeners();
           Uri url = Uri.parse("$apiurl/load_dash_po.php");
-          Map body = {"row_id": pod_a_id};
+          Map body = {"row_id": podAId};
           print("body----$body");
           http.Response response = await http.post(url, body: body);
           var map = jsonDecode(response.body);
@@ -107,8 +120,23 @@ class Controller extends ChangeNotifier {
           for (var item in map) {
             adminReportContents.add(item);
           }
-          calculateSum(adminReportContents);
+          if (adminReportContents.isEmpty) {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              duration: Duration(seconds: 5),
+              content: Text('No Data !!!!'),
+            ));
+          } else {
+            calculateSum(adminReportContents);
+            // ignore: use_build_context_synchronously
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AdMInReportContentScreen(
+                      index: index, po_con_number: poCoNo,po_no: poNo,)),
+            );
+          }
           iscontentLoading[index] = false;
+
           notifyListeners();
         } catch (e) {
           print(e);
@@ -156,5 +184,170 @@ class Controller extends ChangeNotifier {
     adminReportTotal.add(map);
     notifyListeners();
     print("total list------$listmap");
+  }
+
+  ///////////////////////////////////////////////////////////////////
+  subContractorReport(BuildContext context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? cid = prefs.getString("cid");
+    String? userId = prefs.getString("user_id");
+    var map;
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) { 
+        try {
+          isReportLoading = true;
+          notifyListeners();
+          Uri url = Uri.parse("$apiurl/load_contrct_dash.php");
+          Map body = {"user_id": userId};
+          print("body----$body");
+          http.Response response = await http.post(url, body: body);
+          var map = jsonDecode(response.body);
+          print("load_contrct_dash-----$map");
+          sub_contractor_report.clear();
+          for (var item in map) {
+            sub_contractor_report.add(item);
+          }
+          isReportLoading = false;
+          notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+    notifyListeners();
+  }
+
+  setIssearch(bool val) {
+    isSearch = val;
+    notifyListeners();
+  }
+//////////////////////////////////////////////////////////////////////////////
+  subConReportSearchHistory(BuildContext context, String text) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          issearching = true;
+          notifyListeners();
+          if (text.isNotEmpty) {
+            isSearch = true;
+            notifyListeners();
+            newSubReportList = sub_contractor_report
+                .where((e) =>
+                    e["pa_no"].toLowerCase().contains(text.toLowerCase()) ||
+                    e["c_name"].toLowerCase().contains(text.toLowerCase()))
+                .toList();
+          } else {
+            newSubReportList = sub_contractor_report;
+          }
+          issearching = false;
+          notifyListeners();
+          print("new list----$newSubReportList");
+        } catch (e) {
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+///////////////////////////////////////////////////////////////////////////
+  adminReportSearchHistory(BuildContext context, String text) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          issearching = true;
+          notifyListeners();
+          if (text.isNotEmpty) {
+            isSearch = true;
+            notifyListeners();
+            newadminbReportList = adminReport
+                .where((e) =>
+                    e["po_con_no"].toLowerCase().contains(text.toLowerCase()) ||
+                    e["po_no"].toLowerCase().contains(text.toLowerCase()))
+                .toList();
+          } else {
+            newadminbReportList = adminReport;
+          }
+          issearching = false;
+          notifyListeners();
+          print("new adminReport---$newadminbReportList");
+        } catch (e) {
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+
+  ///////////////////////////////////////////////////////////////////////
+  searchPdctSupplier(BuildContext context, String cType, String cName) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? cid = prefs.getString("cid");
+    String? userId = prefs.getString("user_id");
+    var map;
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          print("sdjhfjhbf-----$cType");
+          searchingapi = true;
+          notifyListeners();
+          Uri url = Uri.parse("$apiurl/fetch_all_sup_and_pdt.php");
+          Map body = {"c_type": cType, "c_name": cName};
+          print("item search  body----$body");
+          http.Response response = await http.post(url, body: body);
+          var map = jsonDecode(response.body);
+          print("fetch_all_sup_and_pdt-----$map");
+          searchPdSupplier.clear();
+          for (var item in map) {
+            searchPdSupplier.add(item);
+          }
+          searchingapi = false;
+
+          notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+    notifyListeners();
+  }
+
+  ///////////////////////////////////////////////////////////////////
+  fetch_Suppl_prdct_data(
+      BuildContext context, String type, String rowId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? cid = prefs.getString("cid");
+    String? userId = prefs.getString("user_id");
+    var map;
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          Uri url = Uri.parse("$apiurl/fetch_sup_pdt.php");
+          Map body = {"row_id": rowId, "type": type};
+          print("search det body----$body");
+          http.Response response = await http.post(url, body: body);
+          var map = jsonDecode(response.body);
+          // print("suppl and prdct data-----$map");
+          searchPdSupplierDetails.clear();
+          for (var item in map) {
+            searchPdSupplierDetails.add(item);
+          }
+          if (searchPdSupplierDetails.isNotEmpty) {
+            SearchDataSheet searchsheet = SearchDataSheet();
+            // ignore: use_build_context_synchronously
+            searchsheet.showSearchDataSheet(context, type);
+          }
+          notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+    notifyListeners();
   }
 }

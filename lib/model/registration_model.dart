@@ -30,18 +30,18 @@ class RegistrationData {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['cid'] = this.cid;
-    data['type'] = this.type;
-    data['apptype'] = this.apptype;
+    data['cid'] = cid;
+    data['type'] = type;
+    data['apptype'] = apptype;
 
 
-    data['fp'] = this.fp;
-    data['os'] = this.os;
-    if (this.c_d != null) {
-      data['c_d'] = this.c_d!.map((v) => v.toJson()).toList();
+    data['fp'] = fp;
+    data['os'] = os;
+    if (c_d != null) {
+      data['c_d'] = c_d!.map((v) => v.toJson()).toList();
     }
-    data['msg'] = this.msg;
-    data['sof'] = this.sof;
+    data['msg'] = msg;
+    data['sof'] = sof;
     return data;
   }
 }
@@ -99,21 +99,21 @@ class CD {
   }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data["cid"] = this.cid;
-    data["cpre"] = this.cpre;
-    data["ctype"] = this.ctype;
-    data["hoid"] = this.hoid;
-    data["cnme"] = this.cnme;
-    data["ad1"] = this.ad1;
-    data["ad2"] = this.ad2;
-    data["ad3"] = this.ad3;
-    data["pcode"] = this.pcode;
-    data["land"] = this.land;
-    data["mob"] = this.mob;
-    data["em"] = this.em;
-    data["gst"] = this.gst;
-    data["ccode"] = this.ccode;
-    data["scode"] = this.scode;
+    data["cid"] = cid;
+    data["cpre"] = cpre;
+    data["ctype"] = ctype;
+    data["hoid"] = hoid;
+    data["cnme"] = cnme;
+    data["ad1"] = ad1;
+    data["ad2"] = ad2;
+    data["ad3"] = ad3;
+    data["pcode"] = pcode;
+    data["land"] = land;
+    data["mob"] = mob;
+    data["em"] = em;
+    data["gst"] = gst;
+    data["ccode"] = ccode;
+    data["scode"] = scode;
 
     return data;
   }

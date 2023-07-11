@@ -4,8 +4,8 @@ class LoginModel {
   String? branchId;
   String? branchName;
   String? branchPrefix;
-  String? qt_pre;
-  String? mobile_menu_type;
+  String? qtPre;
+  String? mobileMenuType;
   String? usergroup;
   String? pass;
 
@@ -15,8 +15,8 @@ class LoginModel {
       this.branchId,
       this.branchName,
       this.branchPrefix,
-      this.qt_pre,
-      this.mobile_menu_type,
+      this.qtPre,
+      this.mobileMenuType,
       this.usergroup,
       this.pass});
 
@@ -26,24 +26,23 @@ class LoginModel {
     branchId = json['branch_id'];
     branchName = json['branch_name'];
     branchPrefix = json['branch_prefix'];
-    qt_pre = json['qt_pre'];
-    mobile_menu_type = json['mobile_menu_type'];
+    qtPre = json['qtPre'];
+    mobileMenuType = json['mobileMenuType'];
     usergroup = json['usergroup'];
     pass = json['pass'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['user_id'] = this.userId;
-    data['staff_name'] = this.staffName;
-    data['branch_id'] = this.branchId;
-    data['branch_name'] = this.branchName;
-    data['branch_prefix'] = this.branchPrefix;
-    data['qt_pre'] = this.qt_pre;
-    data['mobile_menu_type'] = this.mobile_menu_type;
-    data['usergroup'] = this.usergroup;
-    data['pass'] = this.pass;
-
+    data['user_id'] = userId;
+    data['staff_name'] = staffName;
+    data['branch_id'] = branchId;
+    data['branch_name'] = branchName;
+    data['branch_prefix'] = branchPrefix;
+    data['qtPre'] = qtPre;
+    data['mobileMenuType'] = mobileMenuType;
+    data['usergroup'] = usergroup;
+    data['pass'] = pass;
     return data;
   }
 }

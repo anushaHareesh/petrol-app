@@ -1,8 +1,6 @@
-
 import 'package:path/path.dart';
 import 'package:petrol/model/registration_model.dart';
 import 'package:sqflite/sqflite.dart';
-
 
 class PetrolApp {
   static final PetrolApp instance = PetrolApp._init();
@@ -104,30 +102,6 @@ class PetrolApp {
     return res;
   }
 
-////////////////////////////////////////////////////////////////////////
-  // Future insertsettingsTable(SettingsModel model) async {
-  //   final db = await database;
-  //   // deleteFromTableCommonQuery('menuTable', "");
-  //   var query1 =
-  //       'INSERT INTO settingsTable(set_id,set_code,set_value,set_type) VALUES(${model.setId},"${model.setCode}","${model.setValue}",${model.setType})';
-  //   var res = await db.rawInsert(query1);
-  //   // print("menu----${query1}");
-  //   print("settingzz---${query1}");
-  //   // print(res);
-  //   return res;
-  // }
-
-  //////////////////////////////////////////////////////////////
-  // Future insertStaffDetails(StaffDetails sdata) async {
-  //   final db = await database;
-  //   var query2 =
-  //       'INSERT INTO staffDetailsTable(sid, sname, uname, pwd, ad1, ad2, ad3, ph, area) VALUES("${sdata.sid}", "${sdata.sname}", "${sdata.unme}", "${sdata.pwd}", "${sdata.ad1}", "${sdata.ad2}", "${sdata.ad3}", "${sdata.ph}", "${sdata.area}")';
-  //   var res = await db.rawInsert(query2);
-  //   print(query2);
-  //   // print(res);
-  //   return res;
-  // }
-
   //////////////////////////////////////////////////////////////////////////////
   Future insertEnqTable(
     String itemName,
@@ -183,43 +157,6 @@ class PetrolApp {
 
       await db.rawDelete('DELETE FROM "$table" WHERE $condition');
     }
-  }
-
-////////////////////////////////////////////////////////////////////////////////
-  selectStaff(String uname, String pwd) async {
-    String result = "";
-    List<String> resultList = [];
-    String? sid;
-    print("uname---Password----$uname--$pwd");
-    resultList.clear();
-    print("before kkkk $resultList");
-    Database db = await instance.database;
-    List<Map<String, dynamic>> list =
-        await db.rawQuery('SELECT * FROM staffDetailsTable');
-    for (var staff in list) {
-      // print(
-      //     "staff['uname'] & staff['pwd']------------------${staff['uname']}--${staff['pwd']}");
-      if (uname.toLowerCase() == staff["uname"].toLowerCase() &&
-          pwd == staff["pwd"]) {
-        print("match");
-        sid = staff['sid'];
-        result = "success";
-
-        resultList.add(result);
-        resultList.add(sid!);
-        break;
-      } else {
-        // ignore: avoid_print
-        print("No match");
-        result = "failed";
-        sid = "";
-      }
-    }
-    print("res===${resultList}");
-
-    print("all data ${list}");
-
-    return resultList;
   }
 
 ///////////////////////////////////////////////////////////////////////////////

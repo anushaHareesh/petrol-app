@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:petrol/screen/tabbar_page.dart';
 import 'package:provider/provider.dart';
-
 import '../controller/controller.dart';
 
 class Home extends StatefulWidget {
@@ -86,12 +85,10 @@ class _HomeState extends State<Home> {
   Widget customContainer(String e) {
     return Consumer<Controller>(
       builder: (context, value, child) {
-        return Container(
-          child: TabbarPage(
-            id: e,
-            // tabId: e,
-            // b_id: value.brId!,
-          ),
+        return TabbarPage(
+          id: e,
+          // tabId: e,
+          // b_id: value.brId!,
         );
       },
     );
