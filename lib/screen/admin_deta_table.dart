@@ -56,13 +56,10 @@ class _TableDataState extends State<TableData> {
               DataColumn(label: Text('Paid To Supplier')),
               DataColumn(label: Text('Contractor Billed')),
               DataColumn(label: Text('Paid To Contractor')),
-              DataColumn(label: Text('Labour Paid')),  
+              DataColumn(label: Text('Labour Paid')),
               DataColumn(
                   label: Align(
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        'Total',
-                      ))),
+                      alignment: Alignment.centerRight, child: Text('Total'))),
             ],
             rows: initRows(value.adminReportTotal)),
       ),
@@ -80,19 +77,21 @@ class _TableDataState extends State<TableData> {
                 ? MaterialStateProperty.all(Color.fromARGB(255, 188, 212, 240))
                 : MaterialStateProperty.all(Color.fromARGB(255, 255, 255, 255)),
         cells: <DataCell>[
-          DataCell(Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              itemList[i]["t_date"].toString(),
-              style: TextStyle(
-                  color: i == itemList.length - 1
-                      ? Colors.white
-                      : Colors.grey[800]),
+          DataCell(
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                itemList[i]["t_date"].toString(),
+                style: TextStyle(
+                    color: i == itemList.length - 1
+                        ? Colors.white
+                        : Colors.grey[800]),
+              ),
             ),
-          )),
+          ),
           DataCell(Align(
             alignment: Alignment.centerRight,
-            child: Text(itemList[i]["tot_billd_ioc"].toString(),
+            child: Text(itemList[i]["tot_billd_ioc1"].toString(),
                 style: TextStyle(
                     color: i == itemList.length - 1
                         ? Colors.white
@@ -100,7 +99,7 @@ class _TableDataState extends State<TableData> {
           )),
           DataCell(Align(
             alignment: Alignment.centerRight,
-            child: Text(itemList[i]["tot_paid_ioc"].toString(),
+            child: Text(itemList[i]["tot_paid_ioc1"].toString(),
                 style: TextStyle(
                     color: i == itemList.length - 1
                         ? Colors.white
@@ -108,7 +107,7 @@ class _TableDataState extends State<TableData> {
           )),
           DataCell(Align(
             alignment: Alignment.centerRight,
-            child: Text(itemList[i]["sup_billd"].toString(),
+            child: Text(itemList[i]["sup_billd1"].toString(),
                 style: TextStyle(
                     color: i == itemList.length - 1
                         ? Colors.white
@@ -116,7 +115,7 @@ class _TableDataState extends State<TableData> {
           )),
           DataCell(Align(
             alignment: Alignment.centerRight,
-            child: Text(itemList[i]["sup_paid"].toString(),
+            child: Text(itemList[i]["sup_paid1"].toString(),
                 style: TextStyle(
                     color: i == itemList.length - 1
                         ? Colors.white
@@ -124,7 +123,7 @@ class _TableDataState extends State<TableData> {
           )),
           DataCell(Align(
             alignment: Alignment.centerRight,
-            child: Text(itemList[i]["con_billd"].toString(),
+            child: Text(itemList[i]["con_billd1"].toString(),
                 style: TextStyle(
                     color: i == itemList.length - 1
                         ? Colors.white
@@ -132,7 +131,7 @@ class _TableDataState extends State<TableData> {
           )),
           DataCell(Align(
             alignment: Alignment.centerRight,
-            child: Text(itemList[i]["con_paid"].toString(),
+            child: Text(itemList[i]["con_paid1"].toString(),
                 style: TextStyle(
                     color: i == itemList.length - 1
                         ? Colors.white
@@ -140,7 +139,7 @@ class _TableDataState extends State<TableData> {
           )),
           DataCell(Align(
             alignment: Alignment.centerRight,
-            child: Text(itemList[i]["lab_paid"].toString(),
+            child: Text(itemList[i]["lab_paid1"].toString(),
                 style: TextStyle(
                     color: i == itemList.length - 1
                         ? Colors.white
@@ -148,7 +147,7 @@ class _TableDataState extends State<TableData> {
           )),
           DataCell(Align(
             alignment: Alignment.centerRight,
-            child: Text(itemList[i]["total"].toString(),
+            child: Text(itemList[i]["total1"].toString(),
                 style: TextStyle(
                     color: i == itemList.length - 1
                         ? Colors.white

@@ -12,6 +12,8 @@ TextEditingController custCode = TextEditingController();
 TextEditingController pass = TextEditingController();
 
 class Login extends StatefulWidget {
+  const Login({super.key});
+
   @override
   State<Login> createState() => _LoginState();
 }

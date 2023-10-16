@@ -2,14 +2,17 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../bottomSheet/search_data_sheet.dart';
+
 import '../components/common_data.dart';
 import '../components/network_connectivity.dart';
 import '../screen/ad_report_screen.dart';
 
 class Controller extends ChangeNotifier {
   double tot_billd_ioc = 0.0;
+  List<String> bal_amt = [];
+
   double tot_paid_ioc = 0.0;
   double sup_billd = 0.0;
   double sup_paid = 0.0;
@@ -20,7 +23,9 @@ class Controller extends ChangeNotifier {
   bool isSearch = false;
   bool issearching = false;
   bool searchingapi = false;
-
+  List<bool> boolvisible = [];
+  List<bool> boolExpansion = [];
+  List<bool> supDetailLoading = [];
   var jsonEncoded;
   List<Map<String, dynamic>> list = [];
   List<Map<String, dynamic>> adminReport = [];
@@ -29,6 +34,7 @@ class Controller extends ChangeNotifier {
   List<Map<String, dynamic>> sub_contractor_report = [];
   List<Map<String, dynamic>> newSubReportList = [];
   List<Map<String, dynamic>> newadminbReportList = [];
+  final oCcy = new NumberFormat("#,##0.00", "en_US");
 
   List<Map<String, dynamic>> searchPdSupplier = [];
   List<Map<String, dynamic>> searchPdSupplierDetails = [];
@@ -75,18 +81,57 @@ class Controller extends ChangeNotifier {
           isReportLoading = true;
           notifyListeners();
           Uri url = Uri.parse("$apiurl/load_po_index.php");
-          Map body = {"row_id": rowId,};
+          Map body = {
+            "row_id": rowId,
+          };
           print("body----$body");
           http.Response response = await http.post(url, body: body);
           var map = jsonDecode(response.body);
           print("load_po_index -----$map");
           adminReport.clear();
           for (var item in map) {
-            adminReport.add(item);
+            double d = double.parse(item["po_amount"]);
+            double t = double.parse(item["tot_paid"]);
+            double ba = d - t;
+            print("ba---$ba");
+            var fr = oCcy.format(ba);
+            Map<String, dynamic> map = {
+              "pod_a_id": item["pod_a_id"],
+              "po_con_no": item["po_con_no"],
+              "po_no": item["po_no"],
+              "po_date": item["po_date"],
+              "po_description": item["po_description"],
+              "po_amount1": item['po_amount1'],
+              "est_comp_date": item["est_comp_date"],
+              "po_limit": item["po_limit"],
+              "debit": item["debit"],
+              "credit": item["credit"],
+              "tot_paid1": item["tot_paid1"],
+              "tot_billd1": item["tot_billd1"],
+              "flag": item["flag"],
+              "tot_exp1": item["tot_exp1"],
+              "bal_amt": fr
+            };
+            adminReport.add(map);
           }
+          //  bal_amt= List.generate(adminReport.length, (index) => );
+
           iscontentLoading =
               List.generate(adminReport.length, (index) => false);
           isExpanded = List.generate(adminReport.length, (index) => false);
+          // bal_amt = List.generate(adminReport.length, (index) => "");
+
+          // for (var i = 0; i < adminReport.length; i++) {
+          //   double d = double.parse(adminReport[i]["po_amount"]);
+          //   double t = double.parse(adminReport[i]["tot_paid"]);
+          //   double ba = d - t;
+          //   print("ba---$ba");
+          //   var fr = oCcy.format(ba);
+          //   print("Eg. 1: ${fr}");
+          //   // print("aaa-----$a");
+          //   bal_amt[i] = fr;
+          //   notifyListeners();
+          // }
           isReportLoading = false;
           notifyListeners();
         } catch (e) {
@@ -100,8 +145,8 @@ class Controller extends ChangeNotifier {
   }
 
   ////////////////////////////////////////////////////////////////
-  adminReportDetails(
-      BuildContext context, String podAId, int index, String poCoNo,String poNo) async {
+  adminReportDetails(BuildContext context, String podAId, int index,
+      String poCoNo, String poNo) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     // String? cid = prefs.getString("cid");
     String? userId = prefs.getString("user_id");
@@ -132,7 +177,10 @@ class Controller extends ChangeNotifier {
               context,
               MaterialPageRoute(
                   builder: (context) => AdMInReportContentScreen(
-                      index: index, po_con_number: poCoNo,po_no: poNo,)),
+                        index: index,
+                        po_con_number: poCoNo,
+                        po_no: poNo,
+                      )),
             );
           }
           iscontentLoading[index] = false;
@@ -172,14 +220,14 @@ class Controller extends ChangeNotifier {
     }
     Map<String, dynamic> map = {
       "t_date": "Total",
-      "tot_paid_ioc": tot_paid_ioc.toStringAsFixed(2),
-      "tot_billd_ioc": tot_billd_ioc.toStringAsFixed(2),
-      "sup_billd": sup_billd.toStringAsFixed(2),
-      "sup_paid": sup_paid.toStringAsFixed(2),
-      "con_billd": con_billd.toStringAsFixed(2),
-      "con_paid": con_paid.toStringAsFixed(2),
-      "lab_paid": lab_paid.toStringAsFixed(2),
-      "total": total.toStringAsFixed(2)
+      "tot_paid_ioc1": oCcy.format(tot_paid_ioc),
+      "tot_billd_ioc1": oCcy.format(tot_billd_ioc),
+      "sup_billd1": oCcy.format(sup_billd),
+      "sup_paid1": oCcy.format(sup_paid),
+      "con_billd1": oCcy.format(con_billd),
+      "con_paid1": oCcy.format(con_paid),
+      "lab_paid1": oCcy.format(lab_paid),
+      "total1": oCcy.format(total)
     };
     adminReportTotal.add(map);
     notifyListeners();
@@ -193,7 +241,7 @@ class Controller extends ChangeNotifier {
     String? userId = prefs.getString("user_id");
     var map;
     NetConnection.networkConnection(context).then((value) async {
-      if (value == true) { 
+      if (value == true) {
         try {
           isReportLoading = true;
           notifyListeners();
@@ -223,6 +271,7 @@ class Controller extends ChangeNotifier {
     isSearch = val;
     notifyListeners();
   }
+
 //////////////////////////////////////////////////////////////////////////////
   subConReportSearchHistory(BuildContext context, String text) {
     NetConnection.networkConnection(context).then((value) async {
@@ -251,6 +300,7 @@ class Controller extends ChangeNotifier {
       }
     });
   }
+
 ///////////////////////////////////////////////////////////////////////////
   adminReportSearchHistory(BuildContext context, String text) {
     NetConnection.networkConnection(context).then((value) async {
@@ -302,8 +352,13 @@ class Controller extends ChangeNotifier {
           for (var item in map) {
             searchPdSupplier.add(item);
           }
-          searchingapi = false;
+          boolvisible = List.generate(searchPdSupplier.length, (index) => true);
 
+          boolExpansion =
+              List.generate(searchPdSupplier.length, (index) => false);
+          supDetailLoading =
+              List.generate(searchPdSupplier.length, (index) => false);
+          searchingapi = false;
           notifyListeners();
         } catch (e) {
           print(e);
@@ -317,7 +372,7 @@ class Controller extends ChangeNotifier {
 
   ///////////////////////////////////////////////////////////////////
   fetch_Suppl_prdct_data(
-      BuildContext context, String type, String rowId) async {
+      BuildContext context, String type, String rowId, int index) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? cid = prefs.getString("cid");
     String? userId = prefs.getString("user_id");
@@ -325,21 +380,26 @@ class Controller extends ChangeNotifier {
     NetConnection.networkConnection(context).then((value) async {
       if (value == true) {
         try {
+          supDetailLoading[index] = true;
+          notifyListeners();
           Uri url = Uri.parse("$apiurl/fetch_sup_pdt.php");
           Map body = {"row_id": rowId, "type": type};
           print("search det body----$body");
           http.Response response = await http.post(url, body: body);
           var map = jsonDecode(response.body);
-          // print("suppl and prdct data-----$map");
           searchPdSupplierDetails.clear();
           for (var item in map) {
             searchPdSupplierDetails.add(item);
           }
-          if (searchPdSupplierDetails.isNotEmpty) {
-            SearchDataSheet searchsheet = SearchDataSheet();
-            // ignore: use_build_context_synchronously
-            searchsheet.showSearchDataSheet(context, type);
-          }
+          print("searchPdSupplierDetails----$searchPdSupplierDetails");
+          // if (type == "2") {
+          //   if(searchPdSupplierDetails.isNotEmpty){
+          //     SearchDataSheet search=SearchDataSheet() ;
+          //     search.showSearchDataSheet(context, type);
+          //   }
+          // }
+          supDetailLoading[index] = false;
+          notifyListeners();
           notifyListeners();
         } catch (e) {
           print(e);
@@ -348,6 +408,33 @@ class Controller extends ChangeNotifier {
         }
       }
     });
+    notifyListeners();
+  }
+
+  setBoolExpansion(bool value, int index) {
+    boolExpansion[index] = value;
+    notifyListeners();
+  }
+
+  toggleData(
+    int i,
+  ) {
+    boolExpansion[i] = !boolExpansion[i];
+    boolvisible[i] = !boolvisible[i];
+
+    notifyListeners();
+  }
+
+  toggleExpansion(
+    int index,
+  ) {
+    for (int i = 0; i < boolExpansion.length; i++) {
+      if (boolExpansion[index] != boolExpansion[i] && boolExpansion[i]) {
+        boolExpansion[i] = !boolExpansion[i];
+        boolvisible[i] = !boolvisible[i];
+      }
+    }
+
     notifyListeners();
   }
 }

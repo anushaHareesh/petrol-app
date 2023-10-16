@@ -66,7 +66,7 @@ class _HomeState extends State<Home> {
                                   top: BorderSide(
                                       color: Colors.grey, width: 0.5))),
                           child: TabBarView(
-                            physics: NeverScrollableScrollPhysics(),
+                            physics:const NeverScrollableScrollPhysics(),
                             children: tabList.map((e) {
                               return customContainer(e["id"]);
                             }).toList(),

@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:google_fonts/google_fonts.dart';
+// import 'package:google_fonts/google_fonts.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:petrol/controller/controller.dart';
 import 'package:petrol/screen/admin_dahboard_data.dart';
-import 'package:petrol/screen/home.dart';
+
 import 'package:petrol/screen/login.dart';
-import 'package:petrol/screen/multi_api_call.dart';
+
 import 'package:petrol/screen/registration.dart';
 import 'package:petrol/screen/sub_contractor_report.dart';
 import 'package:provider/provider.dart';
@@ -27,7 +25,9 @@ String? user_type;
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 // contractor key----RP67MBTRBGBC
+//user--satish,pwd--123 
 // admin key -----RP67MBTRBGBE
+//user---user,pwd---123456
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
@@ -125,7 +125,7 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primaryColor: const Color.fromARGB(255, 2, 48, 87),
-          accentColor: const Color.fromARGB(255, 100, 178, 241),
+          secondaryHeaderColor: const Color.fromARGB(255, 100, 178, 241),
           // primaryColor: Colors.red[400],
           // accentColor: Color.fromARGB(255, 248, 137, 137),
           scaffoldBackgroundColor: Colors.white,
@@ -147,7 +147,7 @@ class _MyAppState extends State<MyApp> {
           // ),
         ),
         navigatorKey: navigatorKey,
-        // home: Login()); 
+        // home: Login());
         home: isRegistered
             ? isLoggedIn && user_type == "BE"
                 ? const AdminDashboardData()

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:petrol/controller/controller.dart';
 import 'package:provider/provider.dart';
 
 class SearchDataSheet {
-  showSearchDataSheet(BuildContext context, String cType) {
+  showSearchDataSheet(BuildContext context, String cType, int index) {
     Size size = MediaQuery.of(context).size;
 
     return showModalBottomSheet<void>(
@@ -60,37 +61,48 @@ class SearchDataSheet {
                       ],
                     ),
                     const Divider(),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: value.searchPdSupplierDetails.length,
-                      itemBuilder: (context, index) {
-                        return Row(
-                          children: [
-                            SizedBox(
-                              width: size.width * 0.02,
-                            ),
-                            Image.asset(
-                              "assets/right.png",
-                              height: size.height * 0.03,
-                              color: Colors.green,
-                            ),
-                            Flexible(
-                              child: Text(
-                                cType == "1"
-                                    ? value.searchPdSupplierDetails[index]
-                                        ["c_name"]
-                                    : value.searchPdSupplierDetails[index]
-                                        ["p_name"],
+                    value.supDetailLoading[index]
+                        ? SpinKitCircle(
+                            color: Theme.of(context).primaryColor,
+                          )
+                        : value.searchPdSupplierDetails.isEmpty
+                            ? Text(
+                                "No data",
                                 style: TextStyle(
-                                    fontSize: 16,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.grey[700]),
+                                    color: Colors.red),
+                              )
+                            : ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: value.searchPdSupplierDetails.length,
+                                itemBuilder: (context, index) {
+                                  return Row(
+                                    children: [
+                                      SizedBox(
+                                        width: size.width * 0.02,
+                                      ),
+                                      Image.asset(
+                                        "assets/right.png",
+                                        height: size.height * 0.03,
+                                        color: Colors.green,
+                                      ),
+                                      Flexible(
+                                        child: Text(
+                                          cType == "1"
+                                              ? value.searchPdSupplierDetails[
+                                                  index]["c_name"]
+                                              : value.searchPdSupplierDetails[
+                                                  index]["p_name"],
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.grey[700]),
+                                        ),
+                                      )
+                                    ],
+                                  );
+                                },
                               ),
-                            )
-                          ],
-                        );
-                      },
-                    ),
                     SizedBox(
                       height: size.height * 0.07,
                     )

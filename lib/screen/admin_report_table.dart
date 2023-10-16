@@ -1,7 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:petrol/screen/ad_report_screen.dart';
 import 'package:provider/provider.dart';
 import '../controller/controller.dart';

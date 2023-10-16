@@ -57,16 +57,20 @@ class _SubContractorReportState extends State<SubContractorReport> {
                   height: size.height * 0.036,
                 ),
                 SizedBox(
-                  width: size.width * 0.01,
+                  width: size.width * 0.02,
                 ),
                 value.name == null
                     ? const SpinKitChasingDots(
                         size: 12,
                         color: Colors.white,
                       )
-                    : Text(
-                        value.name.toString(),
-                        style: const TextStyle(fontSize: 13),
+                    : Flexible(
+                        child: Text(
+                          value.name.toString().toUpperCase(),
+                          // 'anush ah vayakalail house thottada kannurfffxx dggggg hhhhh kkkk llll ',
+                          style: const TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.bold),
+                        ),
                       )
               ],
             ),
@@ -788,6 +792,61 @@ class _SubContractorReportState extends State<SubContractorReport> {
                                                                       .isNotEmpty
                                                               ? ": \u{20B9}${value.newSubReportList[index]["tot_paid"]}"
                                                               : ": \u{20B9}${value.sub_contractor_report[index]["tot_paid"]}",
+                                                          style: const TextStyle(
+                                                              fontSize: 15,
+                                                              color:
+                                                                  Colors.green,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 8.0,
+                                                          right: 8,
+                                                          top: 3,
+                                                          bottom: 3),
+                                                  child: Row(
+                                                    children: [
+                                                      Row(
+                                                        children: [
+                                                          Image.asset(
+                                                            "assets/money.png",
+                                                            height:
+                                                                size.height *
+                                                                    0.016,
+                                                          ),
+                                                          SizedBox(
+                                                            width: size.width *
+                                                                0.01,
+                                                          ),
+                                                          SizedBox(
+                                                            width: size.width *
+                                                                0.3,
+                                                            child: Text(
+                                                              "Supplier Paid",
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                          .grey[
+                                                                      500],
+                                                                  fontSize: 12),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      Flexible(
+                                                        child: Text(
+                                                          value.isSearch &&
+                                                                  value
+                                                                      .newSubReportList
+                                                                      .isNotEmpty
+                                                              ? ": \u{20B9}${value.newSubReportList[index]["sup_paid"]}"
+                                                              : ": \u{20B9}${value.sub_contractor_report[index]["sup_paid"]}",
                                                           style: const TextStyle(
                                                               fontSize: 15,
                                                               color:

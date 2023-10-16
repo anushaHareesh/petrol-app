@@ -109,17 +109,20 @@ class _AdminDashboardDataState extends State<AdminDashboardData> {
                         size: 12,
                         color: Colors.white,
                       )
-                    : Text(
-                        value.name.toString(),
-                        style: const TextStyle(fontSize: 13),
+                    : Flexible(
+                        child: Text(
+                          // 'anush ah vayakalail house thottada kannur ',
+                          value.name.toString(),
+                          style: const TextStyle(fontSize: 12),
+                        ),
                       )
               ],
             ),
           ),
           actions: [
             PopupMenuButton(
-                icon:
-                    const Icon(Icons.more_vert, color: Colors.white), // add this line
+                icon: const Icon(Icons.more_vert,
+                    color: Colors.white), // add this line
                 itemBuilder: (_) => <PopupMenuItem<String>>[
                       PopupMenuItem<String>(
                           child: Container(
@@ -170,21 +173,21 @@ class _AdminDashboardDataState extends State<AdminDashboardData> {
                     onRefresh: _onRefresh,
                     child: Column(
                       children: [
-                       Container(
+                        Container(
                           color: Theme.of(context).primaryColor,
-                          child:  Padding(
+                          child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child:  Card(
-                              child:ListTile(
+                            child: Card(
+                              child: ListTile(
                                 leading: const Icon(Icons.search),
-                                title:TextField(
+                                title: TextField(
                                   controller: controller,
-                                  decoration:  const InputDecoration(
-                                      hintText: 'Search with PO no: or PO Con no: ',
+                                  decoration: const InputDecoration(
+                                      hintText:
+                                          'Search with PO no: or PO Con no: ',
                                       hintStyle: TextStyle(fontSize: 12),
                                       border: InputBorder.none),
                                   onChanged: (val) {
-                                   
                                     Provider.of<Controller>(context,
                                             listen: false)
                                         .adminReportSearchHistory(context, val);
@@ -311,8 +314,8 @@ class _AdminDashboardDataState extends State<AdminDashboardData> {
                                       icon: Image.asset("assets/calendar.png")),
                                   Text(
                                     "$formattedDate",
-                                    style:
-                                        const TextStyle(fontWeight: FontWeight.bold),
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 ],
                               ),
@@ -363,7 +366,7 @@ class _AdminDashboardDataState extends State<AdminDashboardData> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.start,
                                           children: const [
-                                                Text(
+                                            Text(
                                               "No data Found !!!",
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,
@@ -377,7 +380,8 @@ class _AdminDashboardDataState extends State<AdminDashboardData> {
                                           // physics: NeverScrollableScrollPhysics(),
                                           shrinkWrap: true,
                                           itemCount: value.isSearch &&
-                                                  value.newadminbReportList.isNotEmpty
+                                                  value.newadminbReportList
+                                                      .isNotEmpty
                                               ? value.newadminbReportList.length
                                               : value.adminReport.length,
                                           itemBuilder: (context, index) {
@@ -552,8 +556,8 @@ class _AdminDashboardDataState extends State<AdminDashboardData> {
                               child: Text(
                                 value.isSearch &&
                                         value.newadminbReportList.isNotEmpty
-                                    ? ": \u{20B9}${value.newadminbReportList[index]["po_amount"]}"
-                                    : ": \u{20B9}${map["po_amount"]}",
+                                    ? ": \u{20B9}${value.newadminbReportList[index]["po_amount1"]}"
+                                    : ": \u{20B9}${map["po_amount1"]}",
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.green),
@@ -586,8 +590,8 @@ class _AdminDashboardDataState extends State<AdminDashboardData> {
                               child: Text(
                                 value.isSearch &&
                                         value.newadminbReportList.isNotEmpty
-                                    ? ": \u{20B9}${value.newadminbReportList[index]["tot_billd"]}"
-                                    : ": \u{20B9}${map["tot_billd"]}",
+                                    ? ": \u{20B9}${value.newadminbReportList[index]["tot_billd1"]}"
+                                    : ": \u{20B9}${map["tot_billd1"]}",
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.green),
@@ -620,8 +624,42 @@ class _AdminDashboardDataState extends State<AdminDashboardData> {
                               child: Text(
                                 value.isSearch &&
                                         value.newadminbReportList.isNotEmpty
-                                    ? ": \u{20B9}${value.newadminbReportList[index]["tot_paid"]}"
-                                    : ": \u{20B9}${map["tot_paid"]}",
+                                    ? ": \u{20B9}${value.newadminbReportList[index]["tot_paid1"]}"
+                                    : ": \u{20B9}${map["tot_paid1"]}",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.green),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 8, right: 8, bottom: 5, top: 2),
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              "assets/money.png",
+                              height: size.height * 0.02,
+                            ),
+                            SizedBox(
+                              width: size.width * 0.01,
+                            ),
+                            SizedBox(
+                              width: size.width * 0.3,
+                              child: Text(
+                                "Balance Amount",
+                                style: TextStyle(
+                                    color: Colors.grey[500], fontSize: 12),
+                              ),
+                            ),
+                            Expanded(
+                              child: Text(
+                                value.isSearch &&
+                                        value.newadminbReportList.isNotEmpty
+                                    ? ": \u{20B9}${value.newadminbReportList[index]["bal_amt"]}"
+                                    : ": \u{20B9}${map["bal_amt"]}",
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.green),
@@ -688,8 +726,8 @@ class _AdminDashboardDataState extends State<AdminDashboardData> {
                               child: Text(
                                 value.isSearch &&
                                         value.newadminbReportList.isNotEmpty
-                                    ? ": \u{20B9}${value.newadminbReportList[index]["tot_exp"]}"
-                                    : ": \u{20B9}${map["tot_exp"]}",
+                                    ? ": \u{20B9}${value.newadminbReportList[index]["tot_exp1"]}"
+                                    : ": \u{20B9}${map["tot_exp1"]}",
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.red),
@@ -742,12 +780,12 @@ class _AdminDashboardDataState extends State<AdminDashboardData> {
                                                       "2"
                                               ? Container(
                                                   // width: size.width * 0.2,
-                                                  decoration: const BoxDecoration(
-                                                      color: Colors.green),
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                          color: Colors.green),
                                                   child: const Padding(
                                                     padding:
-                                                        EdgeInsets.all(
-                                                            8.0),
+                                                        EdgeInsets.all(8.0),
                                                     child: Center(
                                                       child: Text(
                                                         "In Progress",
@@ -762,12 +800,12 @@ class _AdminDashboardDataState extends State<AdminDashboardData> {
                                                 )
                                               : Container(
                                                   width: size.width * 0.2,
-                                                  decoration: const BoxDecoration(
-                                                      color: Colors.red),
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                          color: Colors.red),
                                                   child: const Padding(
                                                     padding:
-                                                        EdgeInsets.all(
-                                                            8.0),
+                                                        EdgeInsets.all(8.0),
                                                     child: Center(
                                                       child: Text(
                                                         "Pending",
@@ -821,12 +859,12 @@ class _AdminDashboardDataState extends State<AdminDashboardData> {
                                                   map["flag"] == "2"
                                               ? Container(
                                                   // width: size.width * 0.2,
-                                                  decoration: const BoxDecoration(
-                                                      color: Colors.green),
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                          color: Colors.green),
                                                   child: const Padding(
                                                     padding:
-                                                        EdgeInsets.all(
-                                                            8.0),
+                                                        EdgeInsets.all(8.0),
                                                     child: Center(
                                                       child: Text(
                                                         "In Progress",
@@ -841,12 +879,12 @@ class _AdminDashboardDataState extends State<AdminDashboardData> {
                                                 )
                                               : Container(
                                                   width: size.width * 0.2,
-                                                  decoration: const BoxDecoration(
-                                                      color: Colors.red),
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                          color: Colors.red),
                                                   child: const Padding(
                                                     padding:
-                                                        EdgeInsets.all(
-                                                            8.0),
+                                                        EdgeInsets.all(8.0),
                                                     child: Center(
                                                       child: Text(
                                                         "Pending",

@@ -62,7 +62,7 @@ class _AdMInReportContentScreenState extends State<AdMInReportContentScreen> {
                       height: size.height * 0.015,
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left:8.0,right: 8),
+                      padding: const EdgeInsets.only(left: 8.0, right: 8),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -78,7 +78,7 @@ class _AdMInReportContentScreenState extends State<AdMInReportContentScreen> {
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                               // Text("/"),
-                    
+
                               // Text("dsknsknzsf sznfkzfnzsf nsfknfk fksfnkf ")
                             ],
                           ),
