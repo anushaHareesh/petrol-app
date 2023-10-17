@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter/services.dart';
 
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:google_fonts/google_fonts.dart';
-// import 'package:google_fonts/google_fonts.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:petrol/controller/controller.dart';
 import 'package:petrol/screen/admin_dahboard_data.dart';
-
 import 'package:petrol/screen/login.dart';
-
 import 'package:petrol/screen/registration.dart';
 import 'package:petrol/screen/sub_contractor_report.dart';
 import 'package:provider/provider.dart';
